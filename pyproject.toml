@@ -1,0 +1,14 @@
+[project]
+name = "smallpt-gpu-py"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.2.4",
+    "pillow>=11.1.0",
+    "pyopencl>=2025.1",
+    "pyopengl>=3.1.9",
+    "pyopengl-accelerate>=3.1.9",
+    "siphash24>=1.7",
+]
