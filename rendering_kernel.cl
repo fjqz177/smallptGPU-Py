@@ -300,7 +300,9 @@ __kernel void RadianceGPU(
     uint current_sample, // 当前采样数
     __global uint* pixels, // 输出像素缓冲区
     uint work_offset, // 工作偏移
-    uint work_amount)
+    uint work_amount,
+    __constant float* gamma_ptr // 添加 gamma 参数
+)
 {
     // 获取全局工作项 ID
     uint gid = get_global_id(0);
@@ -333,7 +335,7 @@ __kernel void RadianceGPU(
 
     // 转换为像素颜色（RGB）
     // 添加伽马校正（gamma = 2.2）
-    float gamma = 2.2f;
+    float gamma = *gamma_ptr;
     int r_int = (int)(clamp(pow(colors[gid].x, 1.0f / gamma), 0.0f, 1.0f) * 255.0f + 0.5f);
     int g_int = (int)(clamp(pow(colors[gid].y, 1.0f / gamma), 0.0f, 1.0f) * 255.0f + 0.5f);
     int b_int = (int)(clamp(pow(colors[gid].z, 1.0f / gamma), 0.0f, 1.0f) * 255.0f + 0.5f);

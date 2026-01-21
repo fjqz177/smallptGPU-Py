@@ -33,6 +33,13 @@ class RenderDevice:
         self.exe_unit_count = 0.0
         self.exe_time = 0.0
 
+        self.gamma = np.array([2.2], dtype=np.float32)  # 默认 gamma 值为 2.2
+        self.gamma_buffer = cl.Buffer(
+            self.context,
+            cl.mem_flags.READ_ONLY | cl.mem_flags.COPY_HOST_PTR,
+            hostbuf=self.gamma,
+        )
+
         # 加载并编译内核
         with open(kernel_file_name, "r", encoding="utf-8") as f:
             kernel_source = f.read()
@@ -97,6 +104,7 @@ class RenderDevice:
             self.pixel_buffer,
             np.uint32(self.work_offset),
             np.uint32(self.work_amount),
+            self.gamma_buffer,  # 添加 gamma 缓冲区
         )
 
     def execute_kernel(self):
@@ -148,3 +156,8 @@ class RenderDevice:
     def get_work_amount(self):
         """获取工作量"""
         return self.work_amount
+    
+    def update_gamma(self, new_gamma):
+        """更新 gamma 值"""
+        self.gamma[0] = new_gamma
+        cl.enqueue_copy(self.queue, self.gamma_buffer, self.gamma)

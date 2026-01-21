@@ -33,6 +33,7 @@ class RenderConfig:
         self.setup_opencl(use_cpus, use_gpus, force_gpu_work_size)
         self.update_camera()
         self.update_device_workload(True)
+        self.gamma = 2.2  # 默认 gamma 值
 
     def read_scene(self, file_name):
         """读取场景文件"""
