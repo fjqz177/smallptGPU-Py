@@ -2,6 +2,7 @@
 import sys
 from renderconfig import RenderConfig
 from displayfunc import DisplayFunc
+from control_panel import start_control_panel
 
 if __name__ == "__main__":
     if len(sys.argv) == 7:
@@ -21,4 +22,5 @@ if __name__ == "__main__":
         scene_file, width, height, use_cpus, use_gpus, force_gpu_work_size
     )
     display = DisplayFunc(config)
+    start_control_panel(config)
     display.run()

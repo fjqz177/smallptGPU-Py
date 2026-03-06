@@ -205,23 +205,36 @@ class DisplayFunc:
         elif key == "3":  # 向下移动当前球体
             self.config.spheres[self.config.current_sphere].p.y -= 0.5 * MOVE_STEP
             self.config.reinit_scene()
-        elif key == "l":  # 重置负载均衡
-            self.config.reinit(False)
-            self.config.restart_workload_procedure()
+        # elif key == "l":  # 重置负载均衡
+        #     self.config.reinit(False)
+        #     self.config.restart_workload_procedure()
         elif key == "n":  # 选择上一个设备
             self.config.selected_device = (self.config.selected_device + len(self.config.render_devices) - 1) % len(self.config.render_devices)
         elif key == "m":  # 选择下一个设备
             self.config.selected_device = (self.config.selected_device + 1) % len(self.config.render_devices)
-        elif key == "v":  # 减少当前设备的性能索引
-            if self.config.is_profiling():
-                print("Please, wait for the end of the profiling phase")
-            else:
-                self.config.dec_perf_index(self.config.selected_device)
-        elif key == "b":  # 增加当前设备的性能索引
-            if self.config.is_profiling():
-                print("Please, wait for the end of the profiling phase")
-            else:
-                self.config.inc_perf_index(self.config.selected_device)        
+        # elif key == "v":  # 减少当前设备的性能索引
+        #     if self.config.is_profiling():
+        #         print("Please, wait for the end of the profiling phase")
+        #     else:
+        #         self.config.dec_perf_index(self.config.selected_device)
+        # elif key == "b":  # 增加当前设备的性能索引
+        #     if self.config.is_profiling():
+        #         print("Please, wait for the end of the profiling phase")
+        #     else:
+        #         self.config.inc_perf_index(self.config.selected_device)     
+        
+        elif key == "t":  # 增加 gamma 值
+            new_gamma = self.config.gamma + 0.1
+            self.config.gamma = new_gamma
+            for dev in self.config.render_devices:
+                dev.update_gamma(new_gamma)
+            print(f"Gamma increased to {new_gamma:.1f}")
+        elif key == "g":  # 减少 gamma 值
+            new_gamma = max(0.1, self.config.gamma - 0.1)  # 确保 gamma 不小于 0.1
+            self.config.gamma = new_gamma
+            for dev in self.config.render_devices:
+                dev.update_gamma(new_gamma)
+            print(f"Gamma decreased to {new_gamma:.1f}")
 
     def special(self, key, x, y):
         """特殊按键"""
@@ -364,16 +377,16 @@ class DisplayFunc:
         self.PrintString(
             glut.GLUT_BITMAP_9_BY_15, "2, 3, 4, 5, 6, 8, 9 - to move selected object"
         )
-        gl.glRasterPos2i(60, 270)
-        self.PrintString(glut.GLUT_BITMAP_9_BY_15, "l - reset load balancing procedure")
+        # gl.glRasterPos2i(60, 270)
+        # self.PrintString(glut.GLUT_BITMAP_9_BY_15, "l - reset load balancing procedure")
         gl.glRasterPos2i(60, 255)
         self.PrintString(glut.GLUT_BITMAP_9_BY_15, "k - toggle workload visualization")
         gl.glRasterPos2i(60, 240)
         self.PrintString(
             glut.GLUT_BITMAP_9_BY_15, "n, m - select previous/next OpenCL device"
         )
-        gl.glRasterPos2i(60, 225)
-        self.PrintString(
-            glut.GLUT_BITMAP_9_BY_15,
-            "v, b - increase/decrease the worload of the selected OpenCL device",
-        )
+        # gl.glRasterPos2i(60, 225)
+        # self.PrintString(
+        #     glut.GLUT_BITMAP_9_BY_15,
+        #     "v, b - increase/decrease the worload of the selected OpenCL device",
+        # )
